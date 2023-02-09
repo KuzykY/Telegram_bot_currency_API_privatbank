@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 pytelegrambotapi = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

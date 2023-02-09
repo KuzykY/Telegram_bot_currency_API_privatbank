@@ -1,17 +1,17 @@
+import os
+
 import telebot
 import requests
 from telebot import types
+from dotenv import load_dotenv
 
-bot = telebot.TeleBot('')
+load_dotenv()
+
+API_TOKEN = os.getenv('BOT_TOKEN')
+bot = telebot.TeleBot(API_TOKEN)
 
 response = requests.get('https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11').json()
 
-
-# for coin in response:
-#     if coin['ccy'] == 'EUR':
-#         print('PELPE')
-#     elif coin['ccy'] == 'USD':
-#         print('Doral')
 
 @bot.message_handler(commands=['start'])
 def menu(message):
@@ -29,8 +29,9 @@ def coin_step(message):
         keyboard = types.ReplyKeyboardRemove(selective=False)
 
         for coin in response:
-            if coin['ccy'] == 'USD':
+            if message.text == coin['ccy']:
                 bot.send_message(message.chat.id, printCoin(coin['buy'], coin['sale']), reply_markup=keyboard)
+
     except Exception as e:
         bot.reply_to(message, 'oopss')
 
